@@ -1,0 +1,58 @@
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{csquotes}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[ruled,french]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{lscape}
+\usepackage{array}
+\usepackage[normalem]{ulem} % https://github.com/plk/biblatex/issues/193
+% \usepackage{import}
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\graphicspath{{images/}}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage[nottoc]{tocbibind}
+\usepackage[backend=biber,sorting=none]{biblatex}
+\usepackage{pdfpages}
+
+\geometry{a4paper,width=160mm,top=20mm,bottom=20mm,bindingoffset=6mm}
+
+\renewcommand{\thetable}{\Roman{table}}
+\renewcommand{\headrule}{
+    \vspace{-15pt}
+    \hrulefill
+    \raisebox{-0pt}{
+        \scalebox{0.3}{\input{bike.tikz}}
+    }
+    \hrulefill
+}
+
+\setlength{\headheight}{24pt}
+\pagestyle{fancy}
+\fancyhf{}
+% \fancyhead[LE]{\nouppercase{\rightmark\hfill\leftmark}}
+% \fancyhead[RO]{\nouppercase{\leftmark\hfill\rightmark}}
+% \fancyfoot[LE,RO]{\hfill\thepage\hfill}
+
+\fancyhead[L]{INSA Rouen}
+\fancyhead[R]{LIFAT}
+
+%lien
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,     
+    urlcolor=blue,
+    citecolor=blue,
+}

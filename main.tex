@@ -1,0 +1,273 @@
+\documentclass[a4paper,12pt,twoside,french]{article}
+
+\input{packages}
+\addbibresource{bib.bib} % this file should be created
+
+\begin{document}
+\input{cover_page}
+
+\clearpage
+% \thispagestyle{empty}
+\hfill
+\clearpage
+
+\section*{Remerciements}
+Je tiens tout d’abord à remercier Monsieur Arnaud SANDER, fondateur d'UNEEK SARL, qui, en m'accueillant au sein de son entreprise, m'a permi d'avoir une première expérience très enrichissante dans le domaine du développement Web. En étant également mon tuteur de stage, Monsieur Arnaud SANDER m'a fait profiter de sa vision d'ensemble des missions à accomplir, en plus de m'avoir offert un accompagnement solide.
+
+Je souhaite remercier Madame Isabelle SANDER, chargée de mission Ressources Humaines et RSE, pour sa disponibilité et pour m'avoir fait confiance.
+
+Je souhaiterais remercier tout particulièrement Monsieur Lionel CHAUVIN, développeur senior, qui m’a épaulé sur les points techniques de mon travail et qui m’a surtout transmis son expertise et sa passion, ainsi que Valentin DEVINEAU, développeur, pour son aide et ses conseils. Je remercie en outre le restant des collaborateurs d'UNEEK.
+
+Je tiens finalement à remercier l'INSA de Rouen et le département Génie Mathématique, l’accompagnement dont j’ai bénéficié m’a permis de trouver un stage adhérant à mon projet professionnel, et dont la qualité de ma formation m'a permis de contribuer au développement d'une entreprise.
+
+\newpage
+
+\tableofcontents
+\newpage
+
+
+\section{Résumé}
+
+Dans un contexte de 
+
+
+
+\section{Présentation de l'entreprise}
+
+Les recherches du Laboratoire d'Informatique Fondamentale et Appliquée de Tours (LIFAT) consistent à concevoir et développer des modèles, et à créer des algorithmes pour la fouille de données, la visualisation de données, l’apprentissage automatique, le traitement des langues naturelles et des images ou l’optimisation combinatoire. Le laboratoire est donc spécialisé en Sciences des Données, avec des spécialités reconnues dans les domaines de l’Intelligence Artificielle et de l’Optimisation.
+
+En 2025, le LIFAT \cite{lifat} compte 47 enseignants-chercheurs (professeurs, maîtres de conférences), 31 doctorants et 10 post-doctorants.
+
+Les préoccupations scientifiques principales du LIFAT sont : de concevoir et de développer des modèles, des méthodes et des algorithmes ; de fournir des ressources et des logiciels afin d'extraire des informations, tirer des connaissances à partir de données, en intégrant l'interaction homme-machine et finalement de résoudre des problèmes d'optimisation combinatoire en ayant la volonté d'obtenir le meilleur compromis entre résultats et temps de calcul.
+
+Le laboratoire est actuellement organisé en trois équipes de recherche :
+\begin{itemize}
+    \item Bases de données et Traitement du langage naturel (BdTln)
+    \item Reconnaissance des Formes et Analyse d'Images (RFAI)
+    \item Recherche Opérationnelle, Ordonnancement et Transport (ROOT). J'étais rattaché à cette dernière lors de mon stage.
+\end{itemize}
+
+Trois domaines d'application principaux regroupent les activités du laboratoire :
+
+\begin{itemize}
+    \item La santé et le handicap, d'une part, avec de nombreux partenariats avec le CHU de Tours et des équipes de l'INSERM sur les aides techniques pour les handicapés physiques, l'autisme, l'optimisation des flux, l'analyse d'images pour l'aide au diagnostic, la fouille visuelle de données médicales, etc.
+    \item Les données massives et le calcul haute performance, d'autre part, avec des problématiques autour des infrastructures de stockage et d'accès aux données, du calcul GRID / CLOUD, de l'extraction, de l'analyse et de la structuration des données, de l'exploitation, de la visualisation et des IHM.
+    \item Les humanités numériques, avec des questions liées à la structure des bases de données, à la numérisation 3D, à la reconnaissance des formes. De nombreux partenariats sont en cours avec le CESR et le laboratoire CITERES.
+\end{itemize}
+
+Le LIFAT a une expérience en matière de collaborations académiques (au niveau national et international) et de partenariats industriels. Les nombreuses opportunités de transfert technologique (vers le monde social et économique) des recherches menées dans le laboratoire ont donné lieu à la création d'un Centre d’Expertise et de Transfert Universitaire (CETU) au laboratoire appelé ILIAD.
+
+
+
+ROOT :
+\begin{itemize}
+    \item Optimisation combinatoire
+    \item Modélisation mathématique
+    \item Intelligence décisionnelle pour des problèmes d'optimisation
+    \item Domaines d'application : les mobilités urbaines, la santé numérique, l'industrie 4.0
+\end{itemize}
+
+\section{Développement du problème traité}
+
+\subsection{Méthodes}
+
+\subsection{Level of Traffic Stress (LTS)}
+
+Le facteur danger est un indicateur de la sécurité des pistes cyclables, calculé en fonction de la distance et du danger associé à chaque segment de voie (arc) Ce calcul est complété
+par une classification LTS (Level of Traffic Stress), qui attribue à chaque segment de voie un
+niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptibles de l’emprunter.
+
+\begin{itemize}
+    \item LTS 1 : "Interested but concerned" child (Enfant intéressé mais inquiet)
+    \item LTS 2 : "Interested but concerned" adult (Adulte intéressé mais inquiet)
+    \item LTS 3 : "Enthused and confident" cyclist (Cycliste enthousiaste et confiant)
+    \item LTS 4 : "Strong and fearless" (Assuré et sans peur)
+\end{itemize}
+
+LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux
+cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress
+(high-stress) où seuls les cyclistes plus expérimentés se sentent à l’aise \cite{kent_karner}.
+
+\begin{table}[h]
+\centering
+\caption{LTS pour la ville de Tours. Les voies avec un facteur supérieur à 1.75 ont été filtrées.}
+\vspace{0.5cm}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Facteur} & \textbf{Count} & \textbf{LTS} \\
+\hline
+1 & 1905 & LTS 1 (Faible stress) \\
+1.15 &3094 &LTS 1 (Faible stress)\\
+1.3 &5580 &LTS 2 (Faible stress)\\
+1.375& 29017& LTS 2 (Faible stress)\\
+1.45 &1901 &LTS 3 (Fort stress)\\
+1.75 &66934 &LTS 4 (Fort stress)\\
+ \hline 
+ \textbf{Total} & \textbf{108431} & \\
+ \hline 
+ \end{tabular}
+\label{table:lts_tours}
+\end{table}
+
+La table \ref{table:lts_tours} montre que pour la ville de Tours, sur 108431 arcs, plus de la moitié ont un facteur de danger de 1.75. 
+
+\subsection{2 visibilités différentes}
+
+L'optimisation par CPLEX s'effectue sur deux visibilités différentes : 
+
+\begin{itemize}
+    \item La \textbf{visibilité exacte}, où la visibilité d'une tuile comprend toutes les arêtes qui lui sont à une distance inférieure à la distance maximale \texttt{dmax}.
+
+    Etant donné que \texttt{dmax} ne peut pas être dépassé lors de la recherche du résultat optimal, ce modèle donne le même résultat que si tout le graphe était visible, la visibilité est bien exacte. Cette technique permet de rendre CPLEX plus rapide. 
+
+    \item La \textbf{visibilité réduite}, où la visibilité d'un carreau comprend toutes les arêtes qui sont dans un plus court chemin (PCC) d'un nœud délégué jusqu'à un point d'intérêt, tout en respectant la contrainte de distance de la visibilité précédente.
+
+    La visibilité d'un carreau comprend aussi les arêtes se trouvant dans un PCC allant d'un nœud délégué d'un \textit{autre} carreau à un POI, tant que ces arêtes sont à moins de \texttt{dmax} de distance du carreau.
+\end{itemize} 
+
+**mettre schéma**
+
+Lorsqu'on lance CPLEX sur le modèle à visibilité réduite, des POI sont trouvés par "accident" : certains chemins entre un noeud délégué et un POI ne sont pas visibles par le modèle, puisque certaines arêtes sont amputées au modèle. Donc, lorsqu'on recompte manuellement le nombre de POI à présent accessibles, ils sont davantage que la valeur objective retournée par CPLEX. La table \ref{table:lts_tours} montre l'ampleur de ce phénomène pour différentes instances.
+
+Lorsqu'on compare les valeurs objectives de CPLEX pour ces deux visibilités, il faut prendre en compte ce biais.
+
+\subsection{Résultats}
+
+Les instances étant trop couteuses pour être lancées en local (Processeur Intel(R) Pentium(R) CPU 5405U @ 2.30GHz, 8 Go de mémoire RAM), mes tests ont été effectués sur le Mésocentre de Calcul CaSciModOT \cite{cas}. C'est un centre régional de calcul parallèle de taille intermédiaire entre des stations de travail et les grands centres nationaux (CINES, IDRIS, CCRT). Il permet de fournir à l'ensemble des partenaires de la fédération CaScIModOT une grappe possédant une puissance de calcul hautes performances.
+
+Les calculs sont lancés sur un processeur AMD Epyc 7702 à 2GHz,.
+
+% \resizebox{10cm}{!}{
+\begin{table}[h]
+\centering
+\caption{Résultats pour une instance comprenant 500 noeuds}
+\vspace{0.5cm}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+% \begin{tabular}{|c c c c c c c c c c c c c c c|}
+\hline
+% B & dmax & lts & Obj value
+% cplex
+% exact & Obj value
+% cplex PCC
+% exact & Obj value
+% cplex PCC
+% de cplex & Obj value
+% heuristique & reached
+% POI cplex
+% exact & reached
+% POI cplex
+% PCC & reached
+% POI
+% heuristique  & time
+% cplex
+% exact & time
+% cplex
+% PCC & time
+% heuristique & gap obj val
+% cplex exact/
+% cplex PCC & gap obj val
+% cplex PCC/
+% heuristique \\
+% \hline
+1000 & 400 & 1 & 247 & 253 & 253 & 259 & 50.0 & 44.0 & 38.0 & 3523.54 & 0.48 & 0.0 & 0.976 & 0.977 \\
+1000 & 500 & 1 &  & 435 & 435 & 443 &  & 46.0 & 38.0 &  & 1.07 & 0.0 &  & 0.982 \\
+1000 & 400 & 1.3 & 114 & 125 & 147 & 181 & 183.0 & 172.0 & 130.0 & 770.37 & 0.26 & 0.0 & 0.912 & 0.812 \\
+1000 & 400 & 1.44 & 45 & 57 & 79 & 116 & 252.0 & 240.0 & 199.0 & 583.75 & 13.53 & 0.0 & 0.789 & 0.681 \\
+2000 & 1000 & 1 &  & 1659 & 1660 & 1701 &  & 95.0 & 53.0 &  & 39.73 & 0.01 &  & 0.976 \\
+2000 & 400 & 1 & 212 & 223 & 226 & 244 & 85.0 & 74.0 & 53.0 & 5012.11 & 0.41 & 0.0 & 0.951 & 0.926 \\
+2000 & 400 & 1.44 & 19 & 33 & 41 & 94 & 278.0 & 264.0 & 225.0 & 237.8 & 0.33 & 0.0 & 0.576 & 0.436 \\
+2000 & 800 & 1.44 &  & 184 & 350 & 637 &  & 1035.0 & 819.0 &  & 3.77 & 0.01 &  & 0.549 \\
+ \hline 
+ \end{tabular}
+\end{table}
+
+L'efficacité est calculée par erreur relative \cite{erreur_relative}.
+
+Des tests ont été effectués avec une heuristique qui remplit le budget au maximum, mais les résultats sont similaires pour la gamme de paramètres utilisée.
+
+*mettre tableau comparaison*
+
+Pour Tours, de plus grandes valeurs des paramètres nécéssitaient plus de 512go de mémoire.
+
+\subsection{Comparaison des valeurs trouvées par "accident"}
+
+Voir 2 visibilités différentes
+
+\section{Conclusion et bilan}
+
+\section{Grille de déroulement du stage}
+
+
+\begin{longtable}[H]{| m{5cm} | m{10cm} |}
+\hline
+\textbf{Dates} & \textbf{Tâche effectuée}\\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Dates} & \textbf{Tâche effectuée}\\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+semaine 1 : 03/03 au 07/03 & Prise en main du sujet et de CPLEX. \\
+\hline
+semaine 2 : 10/03 au 14/03 & \\
+\hline
+semaine 3 : 17/03 au 21/03 & \\
+\hline
+semaine 4 : 24/03 au 28/03 & \\
+\hline
+semaine 5 : 31/03 au 04/04 & \\
+\hline
+semaine 6 : 07/04 au 11/04 & \\
+\hline
+semaine 7 : 14/04 au 18/04 & \\
+\hline
+semaine 8 : 21/04 au 25/04 & \\
+\hline
+semaine 9 : 28/04 au 02/05 & \\
+\hline
+semaine 10 : 05/05 au 09/05 & \\
+\hline
+semaine 11 : 12/05 au 16/05 & \\
+\hline
+semaine 12 : 19/05 au 23/05 & \\
+\hline
+semaine 13 : 26/05 au 30/05 & \\
+\hline
+semaine 14 : 02/06 au 06/06 & \\
+\hline
+semaine 15 : 09/06 au 13/06 & \\
+\hline
+semaine 16 : 16/06 au 20/06 & \\
+\hline
+semaine 17 : 23/06 au 27/06 & \\
+\hline
+semaine 18 : 30/06 au 04/07 & \\
+\hline
+semaine 19 : 07/07 au 11/07 & \\
+\hline
+semaine 20 : 14/07 au 18/07 & \\
+\hline
+semaine 21 : 21/07 au 25/07 & \\
+\end{longtable}
+
+
+\newpage
+%add bibliography to tablecontent
+\printbibliography[
+heading=bibintoc,
+title={Bibliographie}
+]
+
+\newpage
+\section{Annexes}
+
+
+\end{document}
