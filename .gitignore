@@ -45,3 +45,5 @@ main.pdf
 .bak 
 .mtc
 build/
+*.bcf-SAVE-ERROR
+*.bbl-SAVE-ERROR

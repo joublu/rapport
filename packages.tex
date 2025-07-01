@@ -4,7 +4,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
 \usepackage{graphicx}
-\usepackage[ruled,french]{algorithm2e}
+% \usepackage[ruled,french]{algorithm2e}
+\usepackage{algcompatible}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -42,11 +43,8 @@
 \pagestyle{fancy}
 \fancyhf{}
 % \fancyhead[LE]{\nouppercase{\rightmark\hfill\leftmark}}
-% \fancyhead[RO]{\nouppercase{\leftmark\hfill\rightmark}}
-% \fancyfoot[LE,RO]{\hfill\thepage\hfill}
-
-\fancyhead[L]{INSA Rouen}
-\fancyhead[R]{LIFAT}
+\fancyhead[C]{INSA Rouen \hfill LIFAT}
+\fancyfoot[C]{\hfill \thepage \hfill}
 
 %lien
 \hypersetup{

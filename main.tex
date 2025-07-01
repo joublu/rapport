@@ -1,7 +1,8 @@
-\documentclass[a4paper,12pt,twoside,french]{article}
-
+\documentclass[a4paper,12pt,french]{article}
 \input{packages}
 \addbibresource{bib.bib} % this file should be created
+\frenchspacing
+\allowdisplaybreaks
 
 \begin{document}
 \input{cover_page}
@@ -12,70 +13,127 @@
 \clearpage
 
 \section*{Remerciements}
-Je tiens tout d’abord à remercier Monsieur Arnaud SANDER, fondateur d'UNEEK SARL, qui, en m'accueillant au sein de son entreprise, m'a permi d'avoir une première expérience très enrichissante dans le domaine du développement Web. En étant également mon tuteur de stage, Monsieur Arnaud SANDER m'a fait profiter de sa vision d'ensemble des missions à accomplir, en plus de m'avoir offert un accompagnement solide.
+% Je tiens tout d'abord à remercier Monsieur Arnaud SANDER, fondateur d'UNEEK SARL, qui, en m'accueillant au sein de son entreprise, m'a permi d'avoir une première expérience très enrichissante dans le domaine du développement Web. En étant également mon tuteur de stage, Monsieur Arnaud SANDER m'a fait profiter de sa vision d'ensemble des missions à accomplir, en plus de m'avoir offert un accompagnement solide.
 
-Je souhaite remercier Madame Isabelle SANDER, chargée de mission Ressources Humaines et RSE, pour sa disponibilité et pour m'avoir fait confiance.
+% Je souhaite remercier Madame Isabelle SANDER, chargée de mission Ressources Humaines et RSE, pour sa disponibilité et pour m'avoir fait confiance.
 
-Je souhaiterais remercier tout particulièrement Monsieur Lionel CHAUVIN, développeur senior, qui m’a épaulé sur les points techniques de mon travail et qui m’a surtout transmis son expertise et sa passion, ainsi que Valentin DEVINEAU, développeur, pour son aide et ses conseils. Je remercie en outre le restant des collaborateurs d'UNEEK.
+% Je souhaiterais remercier tout particulièrement Monsieur Lionel CHAUVIN, développeur senior, qui m'a épaulé sur les points techniques de mon travail et qui m'a surtout transmis son expertise et sa passion, ainsi que Valentin DEVINEAU, développeur, pour son aide et ses conseils. Je remercie en outre le restant des collaborateurs d'UNEEK.
 
-Je tiens finalement à remercier l'INSA de Rouen et le département Génie Mathématique, l’accompagnement dont j’ai bénéficié m’a permis de trouver un stage adhérant à mon projet professionnel, et dont la qualité de ma formation m'a permis de contribuer au développement d'une entreprise.
+% Je tiens finalement à remercier l'INSA de Rouen et le département Génie Mathématique, l'accompagnement dont j'ai bénéficié m'a permis de trouver un stage adhérant à mon projet professionnel, et dont la qualité de ma formation m'a permis de contribuer au développement d'une entreprise.
 
 \newpage
-
 \tableofcontents
 \newpage
 
+\section{Lexique}
 
-\section{Résumé}
+\setlength{\parskip}{1em}
 
-Dans un contexte de 
+\section{Introduction}
+\subsection{Contexte du stage}
 
+TODO revoir continuer 
 
+Dans un contexte de transition écologique, la mobilité douce est de plus en plus mise en avant. Le vélo est un moyen de transport qui permet de réduire les émissions de gaz à effet de serre, mais il est encore peu utilisé dans les villes françaises. Pour encourager son utilisation, il est important de développer des infrastructures cyclables adaptées et accessibles à tous les usagers.
 
-\section{Présentation de l'entreprise}
+Le vélo est de plus un moyen de transport bénéfique pour la santé, et il est donc important de le rendre accessible à tous les usagers, quel que soit leur niveau d'expérience. Cependant, les infrastructures cyclables sont souvent inadaptées aux besoins des usagers, ce qui peut décourager leur utilisation.
 
-Les recherches du Laboratoire d'Informatique Fondamentale et Appliquée de Tours (LIFAT) consistent à concevoir et développer des modèles, et à créer des algorithmes pour la fouille de données, la visualisation de données, l’apprentissage automatique, le traitement des langues naturelles et des images ou l’optimisation combinatoire. Le laboratoire est donc spécialisé en Sciences des Données, avec des spécialités reconnues dans les domaines de l’Intelligence Artificielle et de l’Optimisation.
+\subsection{Présentation de l'entreprise}
 
-En 2025, le LIFAT \cite{lifat} compte 47 enseignants-chercheurs (professeurs, maîtres de conférences), 31 doctorants et 10 post-doctorants.
+Le Laboratoire d'Informatique Fondamentale et Appliquée de Tours (LIFAT) \cite{lifat} regroupe des chercheurs et enseignants-chercheurs de l'Université de Tours et de l'INSA Centre Val de Loire. En 2025, il compte 47 enseignants-chercheurs (professeurs, maîtres de conférences), 31 doctorants et 10 post-doctorants.
 
-Les préoccupations scientifiques principales du LIFAT sont : de concevoir et de développer des modèles, des méthodes et des algorithmes ; de fournir des ressources et des logiciels afin d'extraire des informations, tirer des connaissances à partir de données, en intégrant l'interaction homme-machine et finalement de résoudre des problèmes d'optimisation combinatoire en ayant la volonté d'obtenir le meilleur compromis entre résultats et temps de calcul.
+Le laboratoire est donc spécialisé en Sciences des Données, avec des spécialités reconnues dans les domaines de l'Intelligence Artificielle et de l'Optimisation.
+
+Le LIFAT a une expérience en matière de collaborations académiques (au niveau national et international) et de partenariats industriels. Les nombreuses opportunités de transfert technologique (vers le monde social et économique) des recherches menées dans le laboratoire ont donné lieu à la création d'un Centre d'Expertise et de Transfert Universitaire (CETU) au laboratoire appelé ILIAD.
 
 Le laboratoire est actuellement organisé en trois équipes de recherche :
+
 \begin{itemize}
     \item Bases de données et Traitement du langage naturel (BdTln)
     \item Reconnaissance des Formes et Analyse d'Images (RFAI)
     \item Recherche Opérationnelle, Ordonnancement et Transport (ROOT). J'étais rattaché à cette dernière lors de mon stage.
 \end{itemize}
 
-Trois domaines d'application principaux regroupent les activités du laboratoire :
+L'équipe ROOT est spécialisée dans l'optimisation combinatoire et la modélisation mathématique. Elle développe des méthodes et des outils pour résoudre des problèmes complexes d'optimisation dans divers domaines d'application, tels que les mobilités urbaines, la santé numérique et l'industrie 4.0.
 
-\begin{itemize}
-    \item La santé et le handicap, d'une part, avec de nombreux partenariats avec le CHU de Tours et des équipes de l'INSERM sur les aides techniques pour les handicapés physiques, l'autisme, l'optimisation des flux, l'analyse d'images pour l'aide au diagnostic, la fouille visuelle de données médicales, etc.
-    \item Les données massives et le calcul haute performance, d'autre part, avec des problématiques autour des infrastructures de stockage et d'accès aux données, du calcul GRID / CLOUD, de l'extraction, de l'analyse et de la structuration des données, de l'exploitation, de la visualisation et des IHM.
-    \item Les humanités numériques, avec des questions liées à la structure des bases de données, à la numérisation 3D, à la reconnaissance des formes. De nombreux partenariats sont en cours avec le CESR et le laboratoire CITERES.
-\end{itemize}
+\subsection{Objectifs du stage}
 
-Le LIFAT a une expérience en matière de collaborations académiques (au niveau national et international) et de partenariats industriels. Les nombreuses opportunités de transfert technologique (vers le monde social et économique) des recherches menées dans le laboratoire ont donné lieu à la création d'un Centre d’Expertise et de Transfert Universitaire (CETU) au laboratoire appelé ILIAD.
-
-
-
-ROOT :
-\begin{itemize}
-    \item Optimisation combinatoire
-    \item Modélisation mathématique
-    \item Intelligence décisionnelle pour des problèmes d'optimisation
-    \item Domaines d'application : les mobilités urbaines, la santé numérique, l'industrie 4.0
-\end{itemize}
+L'objectif de mon travail est donc d'optimiser un réseau cyclable en fonction d'indicateurs d'équités choisis. En fonction d'un budget fixé, comment optimiser l'équité d'un réseau cyclable ?
 
 \section{Développement du problème traité}
 
-\subsection{Méthodes}
+\subsection{Qu'entend-on par "réseau cyclable équitable" ?}
 
-\subsection{Level of Traffic Stress (LTS)}
+\subsubsection{Le concept d'équité}
+
+Définir ce qu'est l'équité est une tâche complexe. En effet, l'équité est un concept subjectif, qui peut être mesurée avec différentes métriques. Qu'est ce qui doit peser le plus ?
+
+Il est possible de voir l'équité sous plusieurs approches : *équité horizontale et verticale*
+
+\subsubsection{L'équité entre les cyclistes}
+
+Nous retrouvons ce problème lorsque nous essayons de définir ce qu'est un réseau cyclable équitable. Un réseau cyclable équitable permettrait à tous les usagers de se déplacer aussi facilement, quel que soit l'endroit où ils habitent, leur âge, leur niveau d'expérience, etc. 
+
+Par exemple, on peut considérer que l'équité est atteinte lorsque tous les usagers ont accès aux mêmes infrastructures, ou lorsque les infrastructures sont adaptées aux besoins de chaque usager.
+
+Pour un réseau cyclable, l'équité horizontale se réfère par exemple à l'égalité d'accès aux infrastructures pour tous les usagers, tandis que l'équité verticale se réfère à l'adaptation des infrastructures aux besoins de chaque usager.
+
+
+
+Un travail de réflexion sur qu'est ce que l'équité, qu'est ce qui doit être priorisé et sur quel(s) critère(s) d'équité choisir a été réalisé par Lou-ann Deniau, en stage au département Génie de l'Aménagement et Environnement de Polytech Tours en même temps que moi. En se concertant, nous avons pu définir des critères d'équité pour l'optimisation du réseau cyclable, qui soient à la fois pertinents et réalisables informatiquement, en fonction des données présentes, des données que l'on peut croiser, de ce qui ne soit pas trop dur à programmer.
+
+Il existe plusieurs aspects à prendre en compte pour juger de l'équité d'un réseau cyclable. On peut les regrouper en six catégories : 
+
+% \begin{equation}\label{key}
+%    \parbox{1\textwidth}{
+%         \begin{itemize}
+%         \item Les caractéristiques socio-démographiques
+%         \item L'accès à un vélo et à une infrastructure cyclable
+%         \item Les infrastructures et la cyclabilité
+%         \item L'accès à un stationnement vélo et aux opportunités
+%         \item Les motifs du trajet
+%         \item La diversité des opportunités de destination
+%     \end{itemize}
+%    }
+% \end{equation}
+
+\begin{itemize} \label{categories_eq}
+    \item Les caractéristiques socio-démographiques
+    \item L'accès à un vélo et à une infrastructure cyclable
+    \item Les infrastructures et la cyclabilité
+    \item L'accès à un stationnement vélo et aux opportunités
+    \item Les motifs du trajet
+    \item La diversité des opportunités de destination
+\end{itemize}
+Elles sont présentées dans la figure \ref{fig:d1}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{deniau.png}
+    \caption{Déroulé d'un trajet en vélo sous toutes ses dimensions - DENIAU, 2025}
+    \label{fig:d1}
+\end{figure}
+
+\subsection{Modélisation}
+
+\subsubsection{Routes}
+
+Graphe ayant pour arcs (orientés) les routes (tous les endroits où les vélos ont le droit d'accéder, développer ça) et comme noeuds les intersections entre ces routes. On associe à chaque arc son danger (LTS). 
+
+\subsubsection{Points d'intérêts}
+
+Viennent d'OSM etc développer
+
+\subsubsection{Récupérer les données socio-économiques}
+
+Pour relier le réseau cyclable aux données socio-économiques du territoire, nous utilisons les données Filosofi. On les attache au graphe grâce à un système de noeud délégué.
+
+
+\subsubsection{Level of Traffic Stress (LTS)}
 
 Le facteur danger est un indicateur de la sécurité des pistes cyclables, calculé en fonction de la distance et du danger associé à chaque segment de voie (arc) Ce calcul est complété
 par une classification LTS (Level of Traffic Stress), qui attribue à chaque segment de voie un
-niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptibles de l’emprunter.
+niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptibles de l'emprunter.
 
 \begin{itemize}
     \item LTS 1 : "Interested but concerned" child (Enfant intéressé mais inquiet)
@@ -84,13 +142,11 @@ niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptib
     \item LTS 4 : "Strong and fearless" (Assuré et sans peur)
 \end{itemize}
 
-LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux
-cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress
-(high-stress) où seuls les cyclistes plus expérimentés se sentent à l’aise \cite{kent_karner}.
+LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress (high-stress) où seuls les cyclistes plus expérimentés se sentent à l'aise \cite{kent_karner}.
 
 \begin{table}[h]
 \centering
-\caption{LTS pour la ville de Tours. Les voies avec un facteur supérieur à 1.75 ont été filtrées.}
+\caption{LTS pour la ville de Tours. Les voies avec un facteur supérieur à 1.75 (ces voies sont par exemple des autoroutes) ont été filtrées.}
 \vspace{0.5cm}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -111,6 +167,81 @@ cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes 
 
 La table \ref{table:lts_tours} montre que pour la ville de Tours, sur 108431 arcs, plus de la moitié ont un facteur de danger de 1.75. 
 
+Le facteur LTS de chaque arc est récupéré grâce aux données de Géovélo, une application de navigation pour les cyclistes. En revanche, ces données ne sont pas disponibles en open data, et leur mode de calcul n'est pas précisé. 
+
+Lors de l'optimisation, lorsqu'on améliore des arcs, on met leur LTS à 1 pour calculer les indicateurs d'équité par la suite.
+
+Pour intégrer tous ces aspects à l'optimisation, nous avons considéré les choses suivantes :
+\begin{itemize}
+    \item Les caractéristiques socio-démographiques sont prises en compte grâce aux carreaux Filosofi. On peut extraire différentes données : il est par exemple possible d'optimiser le réseau seulement pour les enfants de moins de 14 ans, il est aussi possible de faire peser davantage les carreaux où la population a un niveau de vie inférieur à la moyenne, ou encore de faire peser davantage les carreaux où la population est plus âgée.
+
+    \item L'accès à un vélo et à une infrastructure cyclable est pris en compte implicitement par le modèle, qui va chercher à expandre le réseau cyclable pour qu'il soit accessible à un maximum de personnes. 
+    % Généralement, le centre ville sera plutôt sécurisé, et les zones périphériques seront moins sécurisées. Les arcs à améliorer se trouvent plutot à l'
+    % REVOIR ^si vrai
+    
+    Il serait possible de prendre ça en compte explicitement, pour que l'optimisation soit encore plus axée sur ce domaine.
+
+    \item Les infrastructures et la cyclabilité sont prises en compte par la classification LTS, qui permet de juger de l'accessibilité d'un réseau cyclable pour un type d'utilisateur en particulier.
+    \item L'accès à un stationnement vélo et aux opportunités est pris en compte par la distance maximale qu'un utilisateur est prêt à effectuer (\texttt{dmax}), qui est un paramètre de l'optimisation. Dans la littérature, cette valeur vaut 5 km. On peut aussi utiliser la distance moyenne lors d'un parcours en vélo, qui est de 1,4 km. 
+    \item Les motifs du trajet et la diversité des opportunités de destination sont pris en compte par les POI, à la fois par leur nombre et leur catégorie (éducation, commerce, banques...).
+\end{itemize}
+
+Tous ces aspects doivent être cohérents entre eux, et il est donc important de les prendre en compte lors de l'optimisation. 
+
+Par exemple, si l'on veut optimiser le réseau cyclable pour les enfants de moins de 14 ans, nous utiliserons aussi un \texttt{dmax} inférieur au cas où l'on optimise le réseau cyclable pour tous les utilisateurs. Les POI conservés seront seulement les écoles, les parcs, etc, mais nous pouvons supprimer les banques et les bureaux. La fréquence de ces POI sera pondérée par la population de chaque carreau INSEE, en faisant peser davantage (ou uniquement) la population des enfants de moins de 14 ans. (juste un exemple pcq pas de programme de ce type)
+
+
+\subsection{Optimisation}
+
+Nous faisons tout d'abord l'hypothèse suivante : le coût d'une amélioration est proportionnel à la distance de l'arc modifié, le budget peut donc s'exprimer en mètres de route à aménager.
+
+Pour représenter le réseau cyclable (c'est à dire toutes les routes et chemins pouvant être empruntés potentiellement par les cyclistes), nous utilisons un graphe orienté $G(X, A)$ avec $X \ ( \vert X \vert = n)$ l'ensemble des nœuds et $A$ l'ensemble des arcs. A chaque arc est associé son coût en distance, et son danger. 
+
+On dispose de plus d'un ensemble $P$ de POI. Chaque POI p $\in$ P est associé au nœud le plus proche $n_p$ $\in$ $X$ du graphe. 
+
+On dispose également d'un ensemble $Z$ de carreaux couvrant le graphe. Pour chaque zone, on trouve le nœud $n_z$ $\in$ $X$ le plus proche du centre. Pour chaque zone $z$, on dispose d'une liste de POI potentiels, notés $L_z$, représentant les POI potentiellement accessibles depuis $n_z$ en $dmax$ km si l'ensemble du réseau était amélioré, c'est-à-dire si toutes les routes étaient sécurisées. On connaît également la population $w$ vivant dans chaque zone. Enfin, la fonction succ($i$) renvoie les successeurs du nœud $i$ dans le graphe $G$, et la fonction pred($i$) renvoie les prédécesseurs du nœud $i$ dans le graphe $G$.
+
+Nous avons retenu 3 critères d'optimisation différents :
+
+\begin{enumerate}
+    \item le nombre de POI totaux atteints, 
+    \item le nombre de personnes pouvant atteindre un POI, 
+    \item le nombre de catégories différentes de POI atteintes par chaque carreau,
+\end{enumerate}
+
+\begin{enumerate}
+    \item minimiser le nombre de POI potentiels mais non atteints, 
+    \item minimiser le nombre de POI potentiels mais non atteints, 
+    \item minimiser le nombre de catégories potentielles mais non atteintes.
+\end{enumerate}
+
+Nous conservons les carreaux Filosofi dont la population n'est pas nulle.
+
+Pour optimiser un réseau cyclable, on utilise la programmation linéaire en nombres entiers (PLNE). Le modèle prend en compte différents aspects : TODO
+
+\subsubsection{Modèles exacts}
+
+\subsubsection{Heuristiques}
+
+Pour les heuristiques sur la population et sur le nombre de POI, le schéma est le suivant :
+
+\begin{figure}[H]
+    \centering
+    \begin{algorithmic}
+    \STATE $i\gets 10$
+    \IF {$i\geq 5$} 
+    \STATE $i\gets i-1$
+    \ELSE
+    \IF {$i\leq 3$}
+        \STATE $i\gets i+2$
+    \ENDIF
+    \ENDIF 
+    \end{algorithmic}
+    \caption{algo 1}
+\end{figure}
+
+
+
 \subsection{2 visibilités différentes}
 
 L'optimisation par CPLEX s'effectue sur deux visibilités différentes : 
@@ -127,9 +258,22 @@ L'optimisation par CPLEX s'effectue sur deux visibilités différentes :
 
 **mettre schéma**
 
-Lorsqu'on lance CPLEX sur le modèle à visibilité réduite, des POI sont trouvés par "accident" : certains chemins entre un noeud délégué et un POI ne sont pas visibles par le modèle, puisque certaines arêtes sont amputées au modèle. Donc, lorsqu'on recompte manuellement le nombre de POI à présent accessibles, ils sont davantage que la valeur objective retournée par CPLEX. La table \ref{table:lts_tours} montre l'ampleur de ce phénomène pour différentes instances.
 
-Lorsqu'on compare les valeurs objectives de CPLEX pour ces deux visibilités, il faut prendre en compte ce biais.
+\subsection{Visualisation de l'équité d'un réseau cyclable}
+
+Pour juger de l'équité d'un réseau cyclable pour un type d'utilisateur en particulier, on peut ajouter des malus pour certaines spécificités du réseau. Par exemple, si le réseau comporte beaucoup de discontinuités (c'est à dire des passages dangereux, comme une route à traverser, parsemant une piste cyclable sûre), il n'est pas adapté à des enfants de moins de 14 ans. On peut donc ajouter un malus pour les discontinuités si l'on veut visualiser l'équité d'un réseau cyclable pour des enfants de moins de 14 ans.
+
+Un des aspects les plus importants pour juger de l'équité d'un réseau cyclable est le niveau d'expérience et d'aise des utilisateurs. En revanche, il est difficile de récupérer ce type de données : pas d'études sur la ville de Tours ont été réalisées. Il faudrait en effet avoir des données pour chaque carreau INSEE de la ville.
+
+Une autre chose intéressante à prendre en compte pour calculer l'équité d'un réseau cyclable est le réseau de transports en commun. En effet, si un endroit est mal desservi par les transports en commun, il est d'autant plus nécéssaire d'avoir un réseau cyclable fonctionnel. 
+% Cette chose est aussi difficile à prendre en compte, parce qu'elle nécessiterait de croiser des données (ou peut etre pas avec les POI?)
+
+
+
+
+\subsection{Critères d'optimisation}
+
+Les critères d'optimisations vont directement être en lien avec visualisation de l'équité d'un réseau cyclable. En effet, la mesure de l'existant amène à créer un nouveau critère, et la solution trouvée par l'optimisation va être ensuite évaluée en visualisant. revoir paragraphe
 
 \subsection{Résultats}
 
@@ -189,75 +333,61 @@ Des tests ont été effectués avec une heuristique qui remplit le budget au max
 
 Pour Tours, de plus grandes valeurs des paramètres nécéssitaient plus de 512go de mémoire.
 
-\subsection{Comparaison des valeurs trouvées par "accident"}
+\subsubsection{Comparaison des valeurs trouvées par "accident"}
+
+Lorsqu'on lance CPLEX sur le modèle à visibilité réduite, des POI sont trouvés par "accident" : certains chemins entre un noeud délégué et un POI ne sont pas visibles par le modèle, puisque certaines arêtes sont amputées au modèle. Donc, lorsqu'on recompte manuellement le nombre de POI à présent accessibles, ils sont davantage que la valeur objective retournée par CPLEX. La table \ref{table:lts_tours} montre l'ampleur de ce phénomène pour différentes instances.
+
+Lorsqu'on compare les valeurs objectives de CPLEX pour ces deux visibilités, il faut prendre en compte ce biais.
 
 Voir 2 visibilités différentes
 
-\section{Conclusion et bilan}
+\subsubsection{S'assurer de la cohérence des résultats entre les 2 projets}
+
+J'ai repris deux projets déjà entamés par le LIFAT, Bike Accessibility (optimisation d'un réseau cyclable) et Chemins Equitables (visualisation d'indicateurs d'équités). J'ai ensuite dù faire communiquer ces deux projets. 
+
+Dans les projets Bike Accessibility et Chemins Equitables, certaines étapes étaient effectuées différemment, par exemple compter les POI accessibles, ou encore la reindexation des noeuds. Il était donc important de s'assurer que les résultats trouvés étaient les mêmes entre les deux projets. Sur la figure \ref{fig:nb_poi_compa}, on peut voir une comparaison visuelle des résultats de ces deux projets, pour les POI accessibles.
+
+\begin{figure}[ht]
+\centering
+    \begin{tabular}{cc}    
+        \begin{minipage}[t]{2.5in}
+        \centering
+        \includegraphics[height=2.5in]{nb_poi_BA.png}
+        % \label{fig:task1_l1}
+        \end{minipage}
+    %%    
+        \begin{minipage}[t]{2.5in}
+        \centering
+        \includegraphics[height=2.5in]{nb_poi_CE.png}
+        % \label{fig:task1_cpu}
+        \end{minipage}
+    \end{tabular}
+    \caption{A gauche, le nombre de POI accessibles par carreau INSEE pour le projet Bike Accessibility. A droite, le nombre de POI accessibles par carreau INSEE pour le projet Chemins Equitables. Pour la ville de Fondettes, dans l'agglomération de Tours.}
+    \label{fig:nb_poi_compa}
+\end{figure}
+
+Voir 2 visibilités différentes
+
+
+\section{Conclusion}
+
+\subsection{Bilan du stage}
+
+\subsection{Développements ultérieurs}
+
+Il est possible d'ajouter davantage de paramètres pour gagner en réalisme
+
+\subsection{Apport personnel}
+
+Stage pluridisciplinaire, avec des aspects de recherche opérationnelle, de développement informatique et de visualisation de données.
+
+Travail avec des Géographe - cartographe
+
+Travail d'équipe, vulgarisation, expliquer à des personnes qui ne s'y connaissent pas en informatique.
 
 \section{Grille de déroulement du stage}
 
-
-\begin{longtable}[H]{| m{5cm} | m{10cm} |}
-\hline
-\textbf{Dates} & \textbf{Tâche effectuée}\\
-\hline
-\endfirsthead
-
-\hline
-\textbf{Dates} & \textbf{Tâche effectuée}\\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\hline
-\endlastfoot
-
-semaine 1 : 03/03 au 07/03 & Prise en main du sujet, du projet Bike Accessibility et de CPLEX. \\
-\hline
-semaine 2 : 10/03 au 14/03 & Corrections sur la visibilité.\\
-\hline
-semaine 3 : 17/03 au 21/03 & Développement de l'heuristique *mettre un ref*.\\
-\hline
-semaine 4 : 24/03 au 28/03 & Prise en main de CaSciModOT, lancement de tests, correction de l'heuristique.\\
-\hline
-semaine 5 : 31/03 au 04/04 & Création de nouvelles instances et de scripts Python pour déboguer.\\
-\hline
-semaine 6 : 07/04 au 11/04 & Travail avec un autre critère d'optimisation, création d'une seconde heuristique. \\
-\hline
-semaine 7 : 14/04 au 18/04 & Déboguage du modèle CPLEX.\\
-\hline
-semaine 8 : 21/04 au 25/04 & Lancement de tests de comparaison entre tous les modèles, création de tables de comparaison.\\
-\hline
-semaine 9 : 28/04 au 02/05 & Création de tables de résultats et rédaction sur les résultats. \\
-\hline
-semaine 10 : 05/05 au 09/05 & Prise en main du projet Chemins Equitables. Relancement de l'optimisation avec des instances réelles. \\
-\hline
-semaine 11 : 12/05 au 16/05 & Modification du projet Chemins Equitables pour qu'il fonctionne avec des fichiers provenant du projet Bike Accessibility. \\
-\hline
-semaine 12 : 19/05 au 23/05 & Production de résultats graphiques. \\
-\hline
-semaine 13 : 26/05 au 30/05 & \\
-\hline
-semaine 14 : 02/06 au 06/06 & \\
-\hline
-semaine 15 : 09/06 au 13/06 & \\
-\hline
-semaine 16 : 16/06 au 20/06 & \\
-\hline
-semaine 17 : 23/06 au 27/06 & \\
-\hline
-semaine 18 : 30/06 au 04/07 & \\
-\hline
-semaine 19 : 07/07 au 11/07 & \\
-\hline
-semaine 20 : 14/07 au 18/07 & \\
-\hline
-semaine 21 : 21/07 au 25/07 & \\
-\end{longtable}
-
+\input{sections/timetable.tex}
 
 \newpage
 %add bibliography to tablecontent
@@ -267,7 +397,10 @@ title={Bibliographie}
 ]
 
 \newpage
-\section{Annexes}
+\section*{Annexes}
+
+\subsection*{Modèle PLNE}
+\input{modele_PLNE.tex}
 
 
 \end{document}
