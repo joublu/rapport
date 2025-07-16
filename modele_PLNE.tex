@@ -1,0 +1,94 @@
+Given a graph describing the network, costs representing the cost of the roads with and without improvements, a set of zones and their associated population, a set of POI, the model computes the roads to improve within a given budget with the objective to increase the weighted number of POI reachable by the zones within 5 km. Here we consider that the cost of an improvement is proportional to the distance of the arc that is modified. 
+
+%\subsection{Input data (parameters)}
+
+\textbf{Parameters:} The road network is represented by an oriented graph $G(X,A$) with $X$ ($|X|=n$) the set of nodes, and $A$ the set of arcs. Each arc is associated with two costs : $c_{ij}^1$ (resp. $\overline{c_{ij}}^1$ ) is the distance cost of arc $(i,j)$ before (resp. after) improvements. We are given a set $\mathcal{P}$ of POI. Each POI $p \in \mathcal{P}$ is associated to the closest node $n_p \in X$ in the graph. We are also given a set $\mathcal{Z}$ of zones covering the graph, and for each zone we have the node $n_z \in X$ that is closest to the center of the zone. For each zone $z$ we have a list of potential POI, denoted $\mathcal{L}_z$, representing the POI potentially reachable from $n_z$ in 5 km if all the network were improved, i.e if all roads were secure. We also have the population $w_z$ living in each zone. Lastly, function $succ(i)$ returns the successors of node $i$ in graph $G$, and $pred(i)$ returns the predecessors of node $i$ in graph $G$.
+ \\
+
+%\textbf{Variables:} We use the following variables :
+%\begin{itemize}
+%\item $y_{ij}^k$ : $y_{ij}^k = 1$ if arc $(i,j) \in A$ is part of the path $k$ and the arc $(i,j)$ is not modified, $0$ otherwise.
+%\item $\overline{y_{ij}}^k$ :  $\overline{y_{ij}}^k = 1 $ if arc $(i,j) \in A$ is part of the path $k$ and the arc $(i,j)$ is modified, $0$ otherwise. 
+%\item $\sigma_{ij}$ is equal to 1 if arc $(i,j)$ is not modified, 0 otherwise. When this variable is equal to one, $(i,j)$ must be not modified for all paths going through it.
+%\item $\overline{\sigma_{ij}}$ is equal to 1 if arc $(i,j)$ is modified, 0 otherwise. When this variable is equal to one, $(i,j)$ must be modified for all paths going through it.
+%\item $\delta_{ij}^k$ is equal to 1 if arc $(i,j)$ is in path $k$ (modified or not).
+%\end{itemize}
+
+\textbf{Variables:} The main decision variables are the variables $\overline{\sigma_{ij}}$, which is equal to 1 if arc $(i,j)$ is modified, 0 otherwise. When this variable is equal to one, $(i,j)$ must be modified for all paths going through it. Then, we have variables to model the routing from the center of each zone $n_z$ to its potential reachable POI $p \in \mathcal{L}_z$ : ${\delta_{ij}}_z^p$ is equal to 1 if arc $(i,j)$ is in path from $n_z$ to $n_p$ (modified or not). Finally, to compute the cost of each path, we need the two following variables :
+\begin{itemize}
+\item ${y_{ij}}_z^p$ : ${y_{ij}}_z^p = 1$ if arc $(i,j) \in A$ is part of the path from $n_z$ to $n_p$ and the arc $(i,j)$ is not modified, $0$ otherwise.
+\item $\overline{{y_{ij}}_z^p}$ :  $\overline{{y_{ij}}_z^p} = 1 $ if arc $(i,j) \in A$ is part of the path from $n_z$ to $n_p$  and the arc $(i,j)$ is modified, $0$ otherwise. 
+\end{itemize}
+
+We also have the binary variables $\overline{PPOI_z^p}$, which is equal to 1 if the the POI $p$ is NOT reachable in less than 5 km by $n_z$, and variables $I_z$ that count the number of POI not reachable by zone $n_z$ among its potentially reachable POI.
+
+%\subsection{Constraints}
+\begin{equation}\label{eq:obj}
+Minimize \sum_{z \in \mathcal{Z} } w_z I_z 
+\end{equation}
+
+\begin{equation}\label{eq:consIz}
+I_z = \sum_{p \in \mathcal{L}_z} \overline{PPOI_z^p}, \forall z \in \mathcal{Z}
+\end{equation}
+
+\begin{equation}\label{eq:cons1}
+{y_{ij}}_z^p + \overline{{y_{ij}}_z^p} \leq 1,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall (i,j) \in A 
+\end{equation} 
+
+\begin{equation}\label{eq:cons2}
+\overline{\sigma_{ij}} \geq \overline{{y_{ij}}_z^p},  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall (i,j) \in A 
+\end{equation}
+\begin{equation}
+ 1-\overline{\sigma_{ij}} \geq {y_{ij}}_z^p,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall (i,j) \in A 
+\end{equation}
+
+\begin{equation}\label{eq:path1}
+{\delta_{ij}}_z^p = {y_{ij}}_z^p + \overline{{y_{ij}}_z^p},  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall (i,j) \in A 
+\end{equation}
+
+\begin{equation}\label{eq:path2}
+\sum_{j \in succ(n_z)} {\delta_{n_z,j}}_z^p =1,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z 
+\end{equation}
+\begin{equation}
+\sum_{j \in pred(n_p)} {\delta_{j, n_p}}_z^p =1,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z 
+\end{equation}
+
+\begin{equation}\label{eq:path2bis}
+\sum_{j \in pred(n_z)} {\delta_{j,n_z}}_z^p =0,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z 
+\end{equation}
+\begin{equation}
+\sum_{j \in succ(n_p)} {\delta_{n_p,j}}_z^p =0,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z 
+\end{equation}
+
+
+\begin{equation}\label{eq:path4}
+\sum_{i \in pred(j)} {\delta_{i,j}}_z^p = \sum_{l \in succ(j)} {\delta_{j,l}}_z^p  ,   \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z , \forall j \in N\backslash \{n_z, n_p\}
+\end{equation}
+\begin{equation}\label{eq:path5}
+\sum_{i \in pred(j)} {\delta_{i,j}}_z^p \leq 1,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall j \in N
+\end{equation}
+\begin{equation}
+\sum_{l \in succ(j)} {\delta_{j,l}}_z^p \leq 1,  \forall z \in \mathcal{Z}, \forall p \in \mathcal{L}_z, \forall j \in N
+\end{equation}
+
+\begin{equation}\label{eq:limit1}
+\sum_{(i,j)\in A} \overline{\sigma_{ij}} c_{ij}^1  \leq B
+\end{equation}
+
+\begin{equation}\label{eq:pathcost}
+\begin{aligned}
+D_z^p = & \sum_{(i,j) \in A} {y_{ij}}_z^p c^1_{ij} 
+ + \sum_{(i,j) \in A}  \overline{{y_{ij}}_z^p}  \overline{c_{ij}}^1 , \forall z \in \mathcal{Z}, p \in \mathcal{L}_z \\
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:consdistPoi1}
+    \overline{PPOI_z^p} \leq \frac{D_z^p}{5}, \forall z \in \mathcal{Z}, p \in \mathcal{L}_z 
+\end{equation}
+
+\begin{equation}\label{eq:consdistPoi2}
+    \overline{PPOI_z^p} \geq \frac{-(5-D_z^p)}{BigM}, \forall z \in \mathcal{Z}, p \in \mathcal{L}_z 
+\end{equation}
+
+%% --------------------------------
+Constraints (\ref{eq:consIz}) count the number of POI not reachable by each zone in the modified graph. (\ref{eq:cons1}) and (\ref{eq:cons2}) ensure consistency of $y$ and $\overline{y}$ variables. These constraints ensure that if an arc is modified, it is modified for all paths passing by this arc. Alternatively, if an arc is not modified, it is not modified in other paths. Notice that (\ref{eq:cons1})  is not mandatory due to (\ref{eq:cons2}) formulation.  (\ref{eq:path1}) to (\ref{eq:path5}) guarantee the consistency of the calculated paths between zones center and reachable POI.  (\ref{eq:limit1}) limit the total length of modified arcs with an upper bound B. (\ref{eq:pathcost}) represent the  cost of a path from $n_z$ to $n_p$: this cost takes into consideration whether the arcs are modified or not. It is equal to the distance if all arcs of the path are secure, to infinity otherwise. (\ref{eq:consdistPoi1}) and (\ref{eq:consdistPoi2}) check weather the POI $p$ is reachable in less than 5 km from $n_z$ via secure roads. Finally, the objective function \ref{eq:obj} minimizes the weighted sum of POI not reachable within 5 km.

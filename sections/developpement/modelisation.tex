@@ -1,0 +1,93 @@
+Pour optimiser un réseau cyclable, nous le modélisons sous forme de graphe, auquel nous attachons diverses informations à ses noeuds et arcs.
+
+\subsubsection{Tronçons}\label{sect:troncons}
+
+Un tronçon est défini comme l'ensemble des endroits où les vélos ont le droit d'accéder. Il s'agit des routes (mis à part les autoroutes), des pistes cyclabes dédiées aux vélos, des voies partagées, des chemins, etc. 
+
+Le graphe modélisant le problème est un graphe orienté, ayant pour arcs ces tronçons et comme noeuds les intersections entre les tronçons.
+
+Ce graphe vient de la base de données OpenStreetMap \cite{OSM}. OpenStreetMap est un projet collaboratif de cartographie en ligne qui vise à constituer une base de données géographiques libre du monde. 
+
+\subsubsection{Level of Traffic Stress (LTS)}\label{sect:lts}
+
+Certains tronçons sont plus dangereux que d'autres pour les cyclistes. Pour modéliser cela, nous utilisons la classification LTS (Level of Traffic Stress), qui attribue à chaque segment de voie un
+niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptibles de l'emprunter.
+
+\begin{itemize}
+    \item LTS 1 : "Interested but concerned" child (Enfant intéressé mais inquiet)
+    \item LTS 2 : "Interested but concerned" adult (Adulte intéressé mais inquiet)
+    \item LTS 3 : "Enthused and confident" cyclist (Cycliste enthousiaste et confiant)
+    \item LTS 4 : "Strong and fearless" (Assuré et sans peur)
+\end{itemize}
+
+LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress (high-stress) où seuls les cyclistes plus expérimentés se sentent à l'aise \cite{kent_karner}.
+
+\begin{table}[h]
+\centering
+\caption{LTS pour la ville de Tours. Les voies avec un facteur supérieur à 1.75 (ces voies sont par exemple des autoroutes) ont été filtrées.}
+\vspace{0.5cm}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Facteur} & \textbf{Count} & \textbf{LTS} \\
+\hline
+1 & 1905 & LTS 1 (Faible stress) \\
+1.15 &3094 &LTS 1 (Faible stress)\\
+1.3 &5580 &LTS 2 (Faible stress)\\
+1.375& 29017& LTS 2 (Faible stress)\\
+1.45 &1901 &LTS 3 (Fort stress)\\
+1.75 &66934 &LTS 4 (Fort stress)\\
+ \hline 
+ \textbf{Total} & \textbf{108431} & \\
+ \hline 
+ \end{tabular}
+\label{table:lts_tours}
+\end{table}
+
+La table \ref{table:lts_tours} montre que pour la ville de Tours, sur 108431 arcs, plus de la moitié ont un facteur de danger de 1.75. 
+
+Le niveau LTS est calculé en fonction de la distance et du danger associé à chaque tronçon, il dépend du type d'aménagement et de la vitesse maximale des véhicules si l'infrastructure est partagée entre cyclistes et voitures.
+
+Il est récupéré grâce aux données de Géovélo, une application de navigation pour les cyclistes \cite{géovelo}. En revanche, ces données ne sont pas disponibles en open data, et leur mode de calcul n'est pas précisé exactement. 
+
+
+\subsubsection{Points d'intérêts (POI)}\label{sect:poi}
+
+Pour optimiser l'équité d'un réseau cyclable, nous avons besoin de connaître les points d'intérêt (\emph{Points Of Interest}, POI) présents à proximité du réseau. 
+
+Les POI sont aussi récupérés sur OpenStreetMap. Beaucoup de POI sont référencés sur OpenStreetMap, dont certains qui sont sans intérêt pour notre problématique (par exemple les radars ou les attractions touristiques). Les POI utilisés sont issus d'un filtre créé par Jérome et Alaâ, pour conserver seulement les POI du quotidien, comme les écoles, commerces, batiments administratifs, etc. Ce filtre conserve un peu moins de 4000 POI sur la métropole de Tours.
+
+Chaque POI est associé au nœud le plus proche du graphe (distance euclidienne). 
+
+\subsubsection{Données socio-économiques}\label{sect:filo}
+
+Pour optimiser l'équité d'un réseau cyclable, nous avons aussi besoin de connaître des caractéristiques sur la population, comme la population totale, la population par tranche d'âge, le niveau de vie, etc.
+
+Pour relier le réseau cyclable aux données socio-économiques du territoire, nous utilisons les données Filosofi. Ce sont des données mises à disposition par l'INSEE : la France est découpée en parcelles de terres carrées de $200m \times 200m$, et pour chacun de ces carreaux, des données socio-économiques sont fournies au format .csv \cite{filosofidonnees}, \cite{filosoficarte}.
+
+On les attache au graphe grâce à un système de noeud délégué : nous connaissons les coordonnées spaciales des noeuds du graphe et des carreaux, ce qui nous permet de calculer pour chaque carreau quel noeud du graphe lui est le plus au centre. Ce noeud devient alors le noeud délégué du carreau, nous lui attachons le carreau.
+
+%--------
+
+
+% Pour intégrer tous ces aspects à l'optimisation, nous avons considéré les choses suivantes :
+% \begin{itemize}
+%     \item Les caractéristiques socio-démographiques sont prises en compte grâce aux carreaux Filosofi. On peut extraire différentes données : il est par exemple possible d'optimiser le réseau seulement pour les enfants de moins de 14 ans, il est aussi possible de faire peser davantage les carreaux où la population a un niveau de vie inférieur à la moyenne, ou encore de faire peser davantage les carreaux où la population est plus âgée.
+
+%     \item L'accès à un vélo et à une infrastructure cyclable est pris en compte implicitement par le modèle, qui va chercher à expandre le réseau cyclable pour qu'il soit accessible à un maximum de personnes. 
+%     % Généralement, le centre ville sera plutôt sécurisé, et les zones périphériques seront moins sécurisées. Les arcs à améliorer se trouvent plutot à l'
+%     % REVOIR ^si vrai
+    
+%     Il serait possible de prendre ça en compte explicitement, pour que l'optimisation soit encore plus axée sur ce domaine.
+
+%     \item Les infrastructures et la cyclabilité sont prises en compte par la classification LTS, qui permet de juger de l'accessibilité d'un réseau cyclable pour un type d'utilisateur en particulier.
+%     \item L'accès à un stationnement vélo et aux opportunités est pris en compte par la distance maximale qu'un utilisateur est prêt à effectuer (\texttt{dmax}), qui est un paramètre de l'optimisation. Dans la littérature, cette valeur vaut 5 km. On peut aussi utiliser la distance moyenne lors d'un parcours en vélo, qui est de 1,4 km. 
+%     \item Les motifs du trajet et la diversité des opportunités de destination sont pris en compte par les POI, à la fois par leur nombre et leur catégorie (éducation, commerce, banques...).
+% \end{itemize}
+
+% Tous ces aspects doivent être cohérents entre eux, et il est donc important de les prendre en compte lors de l'optimisation. 
+
+% Par exemple, si l'on veut optimiser le réseau cyclable pour les enfants de moins de 14 ans, nous utiliserons aussi un \texttt{dmax} inférieur au cas où l'on optimise le réseau cyclable pour tous les utilisateurs. Les POI conservés seront seulement les écoles, les parcs, etc, mais nous pouvons supprimer les banques et les bureaux. La fréquence de ces POI sera pondérée par la population de chaque carreau INSEE, en faisant peser davantage (ou uniquement) la population des enfants de moins de 14 ans. (juste un exemple pcq pas de programme de ce type)
+
+
+% \subsubsection{Lier tous les éléments entre eux}
+
