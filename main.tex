@@ -4,13 +4,18 @@
 \frenchspacing
 
 \begin{document}
+\renewcommand{\labelitemi}{\textbullet}
 \allowdisplaybreaks
-\input{cover_page}
+\subfile{sections/cover_page}
 
 \clearpage
 % \thispagestyle{empty}
 \hfill
 \clearpage
+\renewcommand{\headrule}{
+    \vspace{-8pt}
+    \hrulefill\
+}
 
 \section*{Remerciements}
 \subfile{sections/remerciements}
@@ -63,9 +68,11 @@ title={Bibliographie}
 
 \newpage
 \section*{Annexes}
+\subfile{sections/annexes/modele_PLNE}
 
-\subsection*{Modèle PLNE} \label{annexe:modeleexact}
-\subfile{modele_PLNE}
+% \newpage
+\subsection*{Tables de résultats}
+\subfile{sections/annexes/tables.tex}
 
 
 \end{document}

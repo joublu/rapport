@@ -1,3 +1,5 @@
+\subsection*{Integer Linear Programming Model}\label{annexe:modeleexact}
+
 Given a graph describing the network, costs representing the cost of the roads with and without improvements, a set of zones and their associated population, a set of POI, the model computes the roads to improve within a given budget with the objective to increase the weighted number of POI reachable by the zones within 5 km. Here we consider that the cost of an improvement is proportional to the distance of the arc that is modified. 
 
 %\subsection{Input data (parameters)}
@@ -92,3 +94,23 @@ D_z^p = & \sum_{(i,j) \in A} {y_{ij}}_z^p c^1_{ij}
 
 %% --------------------------------
 Constraints (\ref{eq:consIz}) count the number of POI not reachable by each zone in the modified graph. (\ref{eq:cons1}) and (\ref{eq:cons2}) ensure consistency of $y$ and $\overline{y}$ variables. These constraints ensure that if an arc is modified, it is modified for all paths passing by this arc. Alternatively, if an arc is not modified, it is not modified in other paths. Notice that (\ref{eq:cons1})  is not mandatory due to (\ref{eq:cons2}) formulation.  (\ref{eq:path1}) to (\ref{eq:path5}) guarantee the consistency of the calculated paths between zones center and reachable POI.  (\ref{eq:limit1}) limit the total length of modified arcs with an upper bound B. (\ref{eq:pathcost}) represent the  cost of a path from $n_z$ to $n_p$: this cost takes into consideration whether the arcs are modified or not. It is equal to the distance if all arcs of the path are secure, to infinity otherwise. (\ref{eq:consdistPoi1}) and (\ref{eq:consdistPoi2}) check weather the POI $p$ is reachable in less than 5 km from $n_z$ via secure roads. Finally, the objective function \ref{eq:obj} minimizes the weighted sum of POI not reachable within 5 km.
+
+\subsection*{Extension : considering the diversity of POI.}
+
+In this section, we want to consider the diversity of the POI in the optimization process. Therefore, we adapt the previous model as follows. We now assume that each POI is associated to a category $c \in \mathcal{C}$ (exactly one).
+
+\textbf{Parameters :} $POI^p_c$ is an input data and is equal to one if the POI $p$ is of category $c$. We also denote by $\#POI^z_c$ the number of POI of category $c$ that would be reachable by zone $z$ if all the network were secured.
+
+\textbf{Variables :} We introduce a new variable denoted $cat^z_c$ which is equal to 1 if there exists a path in the modified graph from zone $z$ to at least one POI of category $c$. This variable is introduced in the model thanks to this new constraint:
+
+\begin{equation}
+cat^z_c \leq \frac{\sum_{p \in \mathcal{L}_z} \left( POI^p_c \cdot (1 - PPOI^p_z) \right)}{\#POI^z_c}, \quad \forall z \in \mathcal{Z},\ c \in \mathcal{C}
+\tag{18}
+\end{equation}
+
+The objective function can be modified to account for both the diversity of the reachable POI and the population of the tiles:
+
+\begin{equation}
+Maximize \sum_{z \in \mathcal{Z}} \sum_{c \in \mathcal{C}} cat^z_c \cdot w_z
+\tag{19}
+\end{equation}

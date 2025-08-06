@@ -2,7 +2,7 @@ Pour optimiser un réseau cyclable, nous le modélisons sous forme de graphe, au
 
 \subsubsection{Tronçons}\label{sect:troncons}
 
-Un tronçon est défini comme l'ensemble des endroits où les vélos ont le droit d'accéder. Il s'agit des routes (mis à part les autoroutes), des pistes cyclabes dédiées aux vélos, des voies partagées, des chemins, etc. 
+Un tronçon est défini comme l'ensemble des endroits où les vélos ont le droit d'accéder. Il s'agit des routes (mis à part les autoroutes), des pistes cyclables dédiées aux vélos, des voies partagées, des chemins, etc. 
 
 Le graphe modélisant le problème est un graphe orienté, ayant pour arcs ces tronçons et comme noeuds les intersections entre les tronçons.
 
@@ -11,41 +11,32 @@ Ce graphe vient de la base de données OpenStreetMap \cite{OSM}. OpenStreetMap e
 \subsubsection{Level of Traffic Stress (LTS)}\label{sect:lts}
 
 Certains tronçons sont plus dangereux que d'autres pour les cyclistes. Pour modéliser cela, nous utilisons la classification LTS (Level of Traffic Stress), qui attribue à chaque segment de voie un
-niveau de stress allant de 1 à 4, en fonction du profil des cyclistes susceptibles de l'emprunter.
-
-\begin{itemize}
-    \item LTS 1 : "Interested but concerned" child (Enfant intéressé mais inquiet)
-    \item LTS 2 : "Interested but concerned" adult (Adulte intéressé mais inquiet)
-    \item LTS 3 : "Enthused and confident" cyclist (Cycliste enthousiaste et confiant)
-    \item LTS 4 : "Strong and fearless" (Assuré et sans peur)
-\end{itemize}
-
-LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress (high-stress) où seuls les cyclistes plus expérimentés se sentent à l'aise \cite{kent_karner}.
+niveau de stress allant de 1 à 4. LTS 1 et LTS 2 représentent des voies à faible stress (low-stress) qui conviennent aux cyclistes les plus vulnérables, tandis que LTS 3 et LTS 4 indiquent des routes à fort stress (high-stress) où seuls les cyclistes plus expérimentés se sentent à l'aise \cite{kent_karner}.
 
 \begin{table}[h]
 \centering
 \caption{LTS pour la ville de Tours. Les voies avec un facteur supérieur à 1.75 (ces voies sont par exemple des autoroutes) ont été filtrées.}
 \vspace{0.5cm}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c}
 \hline
-\textbf{Facteur} & \textbf{Count} & \textbf{LTS} \\
+\textbf{Facteur} & \textbf{Nombre d'arcs} & \multicolumn{1}{c|}{\textbf{LTS}} \\
 \hline
-1 & 1905 & LTS 1 (Faible stress) \\
-1.15 &3094 &LTS 1 (Faible stress)\\
-1.3 &5580 &LTS 2 (Faible stress)\\
-1.375& 29017& LTS 2 (Faible stress)\\
-1.45 &1901 &LTS 3 (Fort stress)\\
-1.75 &66934 &LTS 4 (Fort stress)\\
- \hline 
- \textbf{Total} & \textbf{108431} & \\
- \hline 
- \end{tabular}
+1 & 1905 & \multicolumn{1}{c|}{LTS 1 (Faible stress)} \\
+1.15 &3094 &\multicolumn{1}{c|}{LTS 1 (Faible stress)}\\
+1.3 &5580 &\multicolumn{1}{c|}{LTS 2 (Faible stress)}\\
+1.375& 29017& \multicolumn{1}{c|}{LTS 2 (Faible stress)}\\
+1.45 &1901 &\multicolumn{1}{c|}{LTS 3 (Fort stress)}\\
+1.75 &66934 &\multicolumn{1}{c|}{LTS 4 (Fort stress)}\\
+\hline 
+\textbf{Total} & \textbf{108431} & \\ 
+\cline{1-2}
+\end{tabular}
 \label{table:lts_tours}
-\end{table}
+\end{table} 
 
 La table \ref{table:lts_tours} montre que pour la ville de Tours, sur 108431 arcs, plus de la moitié ont un facteur de danger de 1.75. 
 
-Le niveau LTS est calculé en fonction de la distance et du danger associé à chaque tronçon, il dépend du type d'aménagement et de la vitesse maximale des véhicules si l'infrastructure est partagée entre cyclistes et voitures.
+Le niveau LTS est calculé en fonction de la distance (c'est à dire sa longueur en mètres) et du danger associé à chaque tronçon, il dépend du type d'aménagement et de la vitesse maximale des véhicules si l'infrastructure est partagée entre cyclistes et voitures.
 
 Il est récupéré grâce aux données de Géovélo, une application de navigation pour les cyclistes \cite{géovelo}. En revanche, ces données ne sont pas disponibles en open data, et leur mode de calcul n'est pas précisé exactement. 
 
@@ -62,7 +53,7 @@ Chaque POI est associé au nœud le plus proche du graphe (distance euclidienne)
 
 Pour optimiser l'équité d'un réseau cyclable, nous avons aussi besoin de connaître des caractéristiques sur la population, comme la population totale, la population par tranche d'âge, le niveau de vie, etc.
 
-Pour relier le réseau cyclable aux données socio-économiques du territoire, nous utilisons les données Filosofi. Ce sont des données mises à disposition par l'INSEE : la France est découpée en parcelles de terres carrées de $200m \times 200m$, et pour chacun de ces carreaux, des données socio-économiques sont fournies au format .csv \cite{filosofidonnees}, \cite{filosoficarte}.
+Pour relier le réseau cyclable aux données socio-économiques du territoire, nous utilisons les données Filosofi. Ce sont des données mises à disposition par l'INSEE : la France est découpée en parcelles de terres carrées de $200m \times 200m$, et pour chacun de ces carreaux, des données socio-économiques sont fournies au format \verb|.csv| \cite{filosofidonnees}, \cite{filosoficarte}.
 
 On les attache au graphe grâce à un système de noeud délégué : nous connaissons les coordonnées spaciales des noeuds du graphe et des carreaux, ce qui nous permet de calculer pour chaque carreau quel noeud du graphe lui est le plus au centre. Ce noeud devient alors le noeud délégué du carreau, nous lui attachons le carreau.
 

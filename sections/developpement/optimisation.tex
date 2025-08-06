@@ -19,16 +19,16 @@ L'objectif est de faire un modèle d'aide à la décision pour la métropole de 
 Nous avons retenu 3 critères d'optimisation différents :
 
 \begin{enumerate} \label{criteresopti}
-    \item le nombre de POI totaux atteints, \label{criterepoi}
+    \item le nombre de POI totaux atteints par les carreaux, \label{criterepoi}
     \item la population pouvant atteindre un POI, \label{criterepopu}
     \item le nombre de catégories différentes de POI atteintes par chaque carreau. \label{criterecat}
 \end{enumerate}
 
-La problématique de l'optimisation est la suivante : en se donnant une distance maximale entre un noeud délégué et un POI \texttt{dmax}, un niveau LTS maximal pour les tronçons que nous pouvons emprunter et un budget à ne pas dépasser, trouver les meilleurs tronçons à aménager.
+La problématique de l'optimisation est la suivante : en se donnant une distance maximale \verb|dmax| entre un noeud délégué et un POI, un niveau LTS maximal pour les tronçons que nous pouvons emprunter et un budget à ne pas dépasser (en mètres), trouver les meilleurs tronçons à aménager.
 
 \subsubsection{Modèles exacts} \label{modelesexacts}
 
-Une manière d'optimiser le réseau cyclable est d'utiliser la programmation linéaire en nombres entiers (PLNE). 
+Une manière d'optimiser le réseau cyclable est d'utiliser la programmation linéaire en nombres entiers (PLNE), en variables de décision binaires. 
 
 Pour construire le modèle, nous faisons tout d'abord l'hypothèse suivante : le coût d'une amélioration est proportionnel à la distance de l'arc modifié, le budget peut donc s'exprimer en mètres de route à aménager.
 
@@ -77,8 +77,9 @@ Avec :
     \item $cat_c^z=
     \begin{cases}
         1 \text{ si la catégorie $c$ est atteinte par le carreau $z$,} \\
-        0 \text{ sinon.}
+        0 \text{ sinon,}
     \end{cases}$
+    \item $w_z$ : population du carreau $z$.
 \end{itemize}
 
 On ajoute en plus des variables modélisant les arcs, indiquant si un arc est aménagé ou non, si un arc appartient au chemin entre le carreau $z$ et le POI $p$..., ainsi que des contraintes imposant la distance maximale d'un chemin carreau-POI, le budget à ne pas dépasser, la consistance d'un chemin...
@@ -87,20 +88,24 @@ Les modèles complets se trouvent en annexe.
 
 \subsubsection{Heuristiques}\label{sect:heuristiquesopt}
 
-Les heuristiques que j'ai développées sont basées sur l'idée suivante : améliorer les plus courts chemins (PCC) partant d'un carreau et arrivant à un POI accessible par le carreau.
+Le gros de mon travail lors de ce stage a été de développer des heuristiques cherchant à optimiser l'équité d'un réseau cyclable, d'une manière similaire aux modèles exacts. 
 
-L'hypothèse derrière cela est qu'un bon chemin à améliorer entre un carreau et un POI est souvent le PCC, en particulier pour les POI se trouvant proches d'un carreau.
+L'intérêt de développer des heuristiques, c'est de pouvoir trouver des solutions rapidement, même si elles ne sont pas optimales. En effet, les modèles exacts prennent souvent trop de temps pour être utilisables, en particulier lorsqu'on travaille avec d'autres acteurs. Dans notre cas, le modèle exact que j'ai récupéré au début de mon stage était utilisable seulement pour une distance \verb|dmax| de 500 mètres sur le graphe représeentant la ville de Tours, alors qu'on aimerait avoir des résultats pour \verb|dmax| = 5 km.
+
+En plus de l'aspect temporel, les modèles exacts demandent beaucoup de ressources et de mémoire, ce qui soulève des problèmes pratiques et écologiques. 
+
+Les heuristiques que j'ai développées sont basées sur l'idée suivante : améliorer les plus courts chemins (PCC) partant d'un carreau et arrivant à un POI accessible par le carreau. L'hypothèse derrière cela est qu'un bon chemin à améliorer entre un carreau et un POI est souvent le PCC, en particulier pour les POI se trouvant proches d'un carreau.
 
 Pour les heuristiques sur la population et sur le nombre de POI, nous utilisons l'algorithme \ref{hpcc}.  
 
-\begin{algorithm}[H]
+\begin{algorithm}[!ht]
 \DontPrintSemicolon
-\caption{heuristique PCC}
+\caption{Heuristique PCC}
 \label{hpcc}
 \Donnees{graphe, carreaux, dmax, lts\_max, budget}
 \Res{Choix de certains arcs à aménager}
 \emph{calculer} les PCC et les stocker dans le vecteur pccs\;
-\emph{trier}(pccs) \Comment*[l]{différentes manières de trier le vecteur}\;
+\emph{trier}(pccs) \Comment*[l]{différentes manières de trier le vecteur}
 \TantQue{pccs non vide}{
     pcc $\leftarrow$ dernier élément de pccs\;
     supprimer le dernier élément de pccs\;
@@ -114,16 +119,16 @@ Pour les heuristiques sur la population et sur le nombre de POI, nous utilisons 
 \end{algorithm}
 
 Plusieurs tris sur le vecteur \texttt{pccs} ont été testés : 
-\begin{itemize}
-    \item trier \texttt{pccs} dans l'ordre décroissant de la distance restante à aménager. Le PCC ayant la distance à aménager la plus courte est donc choisi en premier.
-    \item trier \texttt{pccs} dans l'ordre croissant de la population du carreau de départ du PCC. Les PCC partant de la tile ayant le plus d'habitants sont alors choisis en premier.
-    \item trier \texttt{pccs} dans l'ordre décroissant du ratio $\fFrac{\text{distance à aménager}}{\text{population du carreau}}$.
+\begin{itemize} \label{item:tris}
+    \item trier \texttt{pccs} dans l'ordre décroissant de la distance restante à aménager (\verb|hdist|). Le PCC ayant la distance à aménager la plus courte est donc choisi en premier.
+    \item trier \texttt{pccs} dans l'ordre croissant de la population du carreau de départ du PCC (\verb|hpop|). Les PCC partant du carreau ayant le plus d'habitants sont alors choisis en premier.
+    \item trier \texttt{pccs} dans l'ordre décroissant du ratio $\fFrac{\text{distance à aménager}}{\text{population du carreau}}$ (\verb|hpopdist|).
 \end{itemize}
 
 
-Une heuristique où l'on s'arrêtait prématurément (voir algo \ref{hpcc2}) a aussi été testée. Comme montré sur les tables \textcolor{red}{mettre}, elle donne des résultats similaires à l'heuristique où tout le budget est dépensé. En revanche, le temps pris par les 2 heuristiques sont aussi similaires (la partie la plus coûteuse étant la construction des PCC). J'ai donc conservé l'heuristique \ref{hpcc}.
+Une heuristique où l'on s'arrêtait prématurément, sans utiliser tout le budget, (algorithme \ref{hpcc2}) a aussi été testée. 
 
-\begin{algorithm}[H]
+\begin{algorithm}[!ht]
 \DontPrintSemicolon
 \caption{Heuristique PCC sans utiliser tout le budget}
 \label{hpcc2}
@@ -162,17 +167,19 @@ added\_edges $\leftarrow$ vecteur vide \;
 }
 \end{algorithm}
 
-Pour l'optimisation sur le nombre distinct de catégories atteintes par chaque carreau, nous utilisons l'algorithme \ref{hpccdiv}.
+Pour l'optimisation sur le nombre distinct de catégories atteintes par chaque carreau, nous utilisons l'algorithme \ref{hpccdiv}. Cet algorithme est similaire à l'algorithme \ref{hpcc}, mais il trie les PCC en fonction du nombre de catégories atteintes par le carreau de départ du PCC. L'idée est de maximiser le nombre de catégories atteintes par les carreaux, tout en s'occupant en priorité des carreaux qui atteignent le moins de catégories, dans un objectif d'équité.
 
-\begin{algorithm}[H]
+Cet aspect d'équité n'est pas pris en compte dans le modèle exact associé, qui va lui maximiser le nombre de catégories atteintes par les carreaux, indépendamment du nombre de catégories déjà atteintes par les carreaux.
+
+\begin{algorithm}[!ht]
 \DontPrintSemicolon
-\caption{heuristique diversité de catégories}
+\caption{Heuristique diversité de catégories}
 \label{hpccdiv}
-\Donnees{Carreaux, dmax, lts\_max, budget}
+\Donnees{graphe, carreaux, dmax, lts\_max, budget}
 \Res{Choix de certains arcs à aménager}
 \emph{calculer} les PCC et les stocker dans le vecteur pccs\;
-pccs $\leftarrow$ pour chaque carreau, pour chaque catégorie, conserver seulement le PCC reliant le carreau au POI de la catégorie auquel il reste le moins à aménager (si le PCC existe) 
-\emph{trier\_par\_diversité\_décroissante}(pccs) \Comment*[l]{trier les pcc en fonction du nombre de catégories qu'atteignent leur carreau de départ, dans un objectif d'équité}\;
+pccs $\leftarrow$ $\forall$ carreau, $\forall$ catégorie, conserver seulement le PCC reliant le carreau au POI de la catégorie auquel il reste le moins à aménager (si le PCC existe)\;
+\emph{trier\_par\_diversité\_décroissante}(pccs) \Comment*[l]{trier les pcc en fonction du nombre de catégories qu'atteignent leur carreau de départ} %, dans un objectif d'équité
 \TantQue{pccs non vide}{
     pcc $\leftarrow$ dernier élément de pccs\;
     supprimer le dernier élément de pccs\;
@@ -184,79 +191,100 @@ pccs $\leftarrow$ pour chaque carreau, pour chaque catégorie, conserver seuleme
     }
     \Si{le pcc est aménagé entièrement \textbf{et} que sa distance à aménager était non nulle}{
         nombre\_de\_catégories\_atteintes(pcc.carreau)+=1\;
-        \emph{trier\_par\_diversité\_décroissante}(pccs)
+        \emph{trier\_par\_diversité\_décroissante}(pccs) \Comment*[l]{repositionner correctement les PCC du carreau pour lequel on vient d'atteindre une nouvelle catégorie}
     }
 }
 \end{algorithm}
 
 Il faut garder en tête que modifier le nombre de catégories atteintes par un carreau lorsqu'on aménage entièrement un PCC (dont la distance à aménager n'est pas nulle) n'est pas exactement recalculer le nombre de catégories qu'atteingnent tous les carreaux. En effet, une ou plusieurs des arêtes de ce PCC pourraient permettre aussi à un autre carreau d'atteindre une nouvelle catégorie, par effet de bord. Mais cela permet de gagner considérablement en vitesse.
 
-Le calcul des PCC se fait en utilisant le graphe, les carreaux et la distance maximale. Pour chaque carreau, nous appliquons un algorithme de Dijkstra à son noeud délégué et au graphe entier. Pour chaque noeud, nous stockons en plus de son prédecesseur la distance à aménager pour arriver jusqu'à ce noeud (nous stockons la distance à aménager, mais les PCC sont les PCC au sens de la distance totale, et non pas juste la distance à aménager). Voir \ref{algo:dij} \textcolor{red}{faire l'algo ?}.
+Le calcul des PCC, étape commune à toutes les heuristiques, se fait en utilisant le graphe, les carreaux, la distance maximale ainsi que le facteur lts\_max (algorithme \ref{algo:dij}). Pour chaque carreau, nous appliquons un algorithme de Dijkstra à son noeud délégué et au graphe entier. Pour chaque noeud, nous stockons en plus de son prédecesseur la distance à aménager pour arriver jusqu'à ce noeud (nous stockons la distance à aménager, mais les PCC sont les PCC au sens de la distance totale, et non pas juste la distance à aménager). En ayant stocké ces informations, nous construisons ensuite les PCC selon l'algorithme \ref{algo:const_pcc}.
+
+Cela s'effectue en même temps que le calcul des arcs et noeuds se trouvant dans la visibilité PCC des carreaux, pour économiser du temps de calcul. 
 
 
+\begin{algorithm}[!ht]
+\DontPrintSemicolon
+\caption{Initialisation de la visibilité PCC}
+\label{algo:dij}
+\Donnees{graphe, carreaux, dmax, lts\_max}
+\Res{Stockage des arcs et noeuds dans la visibilité de chaque carreau, ainsi que des prédecesseurs et distances à aménager}
+\PourCh{carreau}{
+    carreau.predecesseurs\_et\_distance\_à\_aménager $\leftarrow$ map vide\;
 
-Cela s'effectue en même temps que le calcul des arcs et noeuds se trouvant dans la visibilité des carreaux, pour économiser du temps de calcul. 
+    \textit{S} $\leftarrow$ pile vide de nœuds\;
+    \textit{R} $\leftarrow$ pile vide de de nœuds à reset\;
+    \emph{initialiser tous les nœuds :} distance = $\infty$, distance\_à\_aménager = $\infty$, visité = faux \;
+    \textit{u} $\leftarrow$ nœud central du carreau\;u.distance $\leftarrow 0$, u.distance\_à\_aménager $\leftarrow 0$, u.visité $\leftarrow$ vrai\;
+    \emph{empiler} u dans \textit{S} et \textit{R}\;
+    \TantQue{\textit{S} non vide}{
+        v $\leftarrow$ noeud de \textit{S} tel que v.distance soit minimal \;
+        \emph{ajouter} v à la visibilité du carreau \Comment*[l]{visibilité en terme de noeuds}
+        \PourCh{arc \textit{e} sortant de v}{
+            w $\leftarrow$ autre extrémité de \textit{e}\;
+            % \Comment*[l]{calcul des nouvelles étiquettes}\;
+            nouvelle\_distance $\leftarrow$ v.distance + e.coût \Comment*[l]{le cout étant la longueur d'un arc}
+            nouvelle\_distance\_à\_aménager $\leftarrow$ v.distance\_à\_aménager\;
 
-Procéder comme cela nécéssite de DeleteEdgesAndNodesNotInPCC \textcolor{red}{développer}
+            \Comment*[l]{s'il faut aménager cet arc pour qu'il soit utilisable, on met à jour la distance à aménager}
+            \Si{e.LTS > lts\_max}{
+                nouvelle\_distance\_à\_aménager $\leftarrow$ nouvelle\_distance\_à\_aménager + e.coût \;
+            }
+            \Si{nouvelle\_distance $\leq$ dmax \textbf{et} nouvelle\_distance $<$ w.distance}{
+                % mise à jour
+                w.distance $\leftarrow$ nouvelle\_distance\;
+                w.distance\_à\_aménager $\leftarrow$ nouvelle\_distance\_à\_aménager\;
+                \Si{w.visité = faux}{
+                    w.visité $\leftarrow$ vrai\;
+                    empiler w dans \textit{S} et \textit{R}\;
+                }
+                % ajouter l'arête visible
+                \emph{ajouter} e à la visibilité du carreau \Comment*[l]{visibilité en terme d'arcs}
+                % stocker prédécesseur et distance à aménager
+                carreau.predecesseurs\_et\_distance\_à\_aménager[w.id] $\leftarrow$ (v, nouvelle\_distance\_à\_aménager) \Comment*[l]{c'est une map, donc les informations sur w sont modifiables}
+            }
+        }
+    }
+    \Comment*[l]{Nous enregistrons quels noeuds et arcs sont dans la visibilité du carreau, et quels noeuds permettent de rencontruiste les PCC du carreau, ainsi que leur distances à aménager. On peut alors réitialiser les noeuds et passer au prochain carreau.}
+}
+\end{algorithm}
 
-% \begin{algorithm}[H]
-% \label{algo:dij}
-% \caption{initialize\_tiles\_visibility\_set\_h(\textit{carreaux}, \textit{dmax}, \textit{lts\_max})}
-% \KwOut{Calcul des PCC entre chaque couple la distance à aménager de chaque}
-
-% % initialisation
-% \BlankLine
-% \CommentSty{// préparation des distances et des piles}
-% initialiser tous les nœuds : dist = $\infty$, visité = faux\;
-% let \textit{S} $\leftarrow$ pile vide de nœuds\;
-% let \textit{R} $\leftarrow$ pile vide pour reset\;
-% \textit{u} $\leftarrow$ nœud central de \textit{currTile}\;
-% u.dist $\leftarrow 0$, u.distAménager $\leftarrow 0$, u.visité $\leftarrow$ vrai\;
-% empiler u dans \textit{S} et \textit{R}\;
-
-% \BlankLine
-% \While{\textit{S} non vide}{
-%     v $\leftarrow$ dépiler(\textit{S})\;
-%     ajouter v à \texttt{currTile.NodeVisibility}\;
-%     \For{chaque \textit{e} sortant de v}{
-%         w $\leftarrow$ extrémité de \textit{e}\;
-%         \tcc{calcul des nouvelles étiquettes}
-%         $\delta \leftarrow$ v.dist + e.coût\;
-%         $\delta_a \leftarrow$ v.distAménager\;
-%         \If{e.LTS > lts\_max}{
-%             $\delta_a \leftarrow \delta_a + e.coût$\;
-%         }
-%         \If{$\delta \le$ dmax \textbf{et} $\delta <$ w.dist}{
-%             % mise à jour
-%             w.dist $\leftarrow \delta$\;
-%             w.distAménager $\leftarrow \delta_a$\;
-%             \If{w.visité = faux}{
-%                 w.visité $\leftarrow$ vrai\;
-%                 empiler w dans \textit{S} et \textit{R}\;
-%             }
-%             % ajouter l'arête visible
-%             ajouter e à \texttt{currTile.EdgeVisibility}\;
-%             % stocker prédécesseur et distance à aménager
-%             \texttt{currTile.PredAndDist}[\,w.id\,] $\leftarrow$ (v, \(\delta_a\))\;
-%         }
-%     }
-%     % tri de la pile par distance décroissante
-%     trier \textit{S} par \texttt{dist} décroissante\;
-% }
-% \end{algorithm}
-
+\begin{algorithm}[!ht]
+\DontPrintSemicolon
+\caption{Construction des PCC}
+\label{algo:const_pcc}
+\Donnees{graphe, carreaux}
+\Res{Liste des PCC}
+pccs $\leftarrow$ liste vide \;
+\PourCh{carreau}{
+    \PourCh{POI potentiellement accessible par le carreau $p$}{
+        \Si{$p$ $\neq$ noeud central du carreau}{
+            chemin $\leftarrow$ liste vide\;
+            here $\leftarrow p$ \;
+            pred, dist $\leftarrow$ prédécesseur et distance à aménager pour here\;
+            \TantQue{pred $\neq$ nul}{
+                \emph{insérer} l'arête (pred, here) au début de chemin\;
+                here $\leftarrow$ pred\;
+                pred, dist $\leftarrow$ prédécesseur et distance à aménager pour here\;
+            }
+            pcc $\leftarrow$ un nouveau PCC avec les informations (carreau d'origine, $p$, distance à aménager, chemin, population)\;
+            \emph{ajouter} pcc à pccs\;
+        }
+    }
+}
+\end{algorithm}
 
 \subsubsection{Deux visibilités différentes} \label{sect:2visi}
 
 L'optimisation par CPLEX s'effectue sur deux visibilités différentes : 
 
 \begin{itemize}
-    \item La \textbf{visibilité exacte}, où la visibilité d'un carreau comprend tous les arcs qui lui sont à une distance inférieure à la distance maximale \texttt{dmax}. Etant donné que \texttt{dmax} ne peut pas être dépassé lors de la recherche du résultat optimal, ce modèle donne le même résultat que si tout le graphe était visible, la visibilité est bien exacte. Cette technique permet de rendre CPLEX plus rapide, parce qu'on ne créé pas de variables correspondant aux couples carreaux-POI et pour les triplets carreaux-POI-arcs dans un chemin impossibles. Voir figure \ref{fig:exactvisi} \textcolor{red}{mettre ?}.%\par\medskip
+    \item La \textbf{visibilité exacte}, où la visibilité d'un carreau comprend tous les arcs qui lui sont à une distance inférieure à la distance maximale \texttt{dmax}. Etant donné que \texttt{dmax} ne peut pas être dépassé lors de la recherche du résultat optimal, ce modèle donne le même résultat que si tout le graphe était visible, la visibilité est bien exacte. Cette technique permet de rendre CPLEX plus rapide, parce qu'on ne créé pas de variables correspondant aux couples carreaux-POI et pour les triplets carreaux-POI-arcs dans un chemin impossibles.
 
-    \item La \textbf{visibilité réduite/visibilité PCC}, où la visibilité d'un carreau comprend toutes les arêtes qui sont dans un PCC d'un nœud délégué jusqu'à un point d'intérêt, tout en respectant la contrainte de distance de la visibilité précédente. La visibilité d'un carreau comprend aussi les arêtes se trouvant dans un PCC allant d'un nœud délégué d'un \emph{autre} carreau à un POI, tant que ces arêtes sont à moins de \texttt{dmax} de distance du carreau. Voir figure \ref{fig:smallvisi}.
+    \item La \textbf{visibilité PCC/visibilité réduite}, où la visibilité d'un carreau comprend toutes les arêtes qui sont dans un PCC d'un nœud délégué jusqu'à un point d'intérêt, tout en respectant la contrainte de distance de la visibilité précédente. La visibilité d'un carreau comprend aussi les arêtes se trouvant dans un PCC allant d'un nœud délégué d'un \emph{autre} carreau à un POI, tant que ces arêtes sont à moins de \texttt{dmax} de distance du carreau. Voir figure \ref{fig:smallvisi}.
 \end{itemize} 
 
-\begin{figure}[H]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
@@ -275,24 +303,25 @@ L'optimisation par CPLEX s'effectue sur deux visibilités différentes :
         \includegraphics[width=1\linewidth]{PDFs/visi_z1.pdf}
     \caption{Si l'on suppose qu'en passant seulement par un arc hachuré en vert ou bleu, en moins de \texttt{dmax} il est possible d'aller de $z_1$ jusqu'à $n_a$, mais pas jusqu'à $n_b$, la visibilité de $z_1$ est celle ci dessus.}
     \end{subfigure}
-    \caption{Visibilité réduite}
+    \caption{Visibilité PCC}
     \label{fig:smallvisi}
 \end{figure}
 
 Les noeuds visibles sont ceux qui appartiennent à un arc dans la visibilité.
 
-La visibilité pour les heuristiques est toujours la seconde. L'intérêt de faire un modèle exact sur la seconde visibilité est d'avoir un modèle plus rapide que le modèle exact sur la visibilité exacte, et aussi de pouvoir comparer les performances des heuristiques.
+La visibilité pour les heuristiques est toujours la seconde. L'intérêt de faire un modèle exact sur la seconde visibilité est d'avoir un modèle plus rapide que le modèle exact sur la visibilité exacte, mais aussi de pouvoir comparer les performances des heuristiques. Il existe donc deux modèles exacts :
+\begin{itemize}
+    \item un modèle exact sur la visibilité exacte,
+    \item un modèle exact sur la visibilité PCC.
+\end{itemize}
 
-La valeur objective dépend aussi de la visibilité sur laquelle on la calcule.
+On remarque que procéder comme dans l'algorithme \ref{algo:dij} ne donne pas exactement la visibilité PCC, puisqu'on ajoute des arcs et arêtes qui ne sont pas dans un PCC noeud délégué-POI. Il faut ensuite supprimer les arcs et noeuds de la visibilité qui ne sont pas dans les PCC, c'est à dire parcourir encore une fois tous les carreaux (ce que je fais dans une fonction différente de la fonction codant l'algorithme \ref{algo:dij}). Il aurait peut être été pertinent d'organiser les étapes différemment, pour économiser du temps de calcul, mais cela aurait été plus compliqué à mettre en place.
 
+La valeur objective des modèles exacts dépend aussi de la visibilité sur laquelle on la calcule. Cela est davantage détaillé en section \ref{sect:prog_modelesexacts}.
 
 
 \subsubsection{Pertinence des résultats trouvés}
 
-Les modèles utilisés sont incomplets par rapport à la réalité du terrain. Ils ne se soucient pas, par exemple, d'à quel point il est facile d'aménager tel ou tel tronçon. 
-
-L'hypothèse sur le budget est simpliste. En réalité, le budget alloué à l'aménagement des tronçons peut varier en fonction de nombreux facteurs, tels que la complexité des travaux, les contraintes techniques, ou encore les enjeux environnementaux.
-
-Les modèles ne prennent pas non plus en compte les effets à long terme des aménagements proposés. Par conséquent, les résultats obtenus doivent être interprétés avec prudence et complétés par des études de terrain et des consultations avec les acteurs locaux.
+Les modèles utilisés sont incomplets par rapport à la réalité du terrain. Ils ne se soucient pas, par exemple, d'à quel point il est facile d'aménager tel ou tel tronçon. De plus, l'hypothèse sur le budget est simpliste. En réalité, le budget alloué à l'aménagement des tronçons peut varier en fonction de nombreux facteurs, tels que la complexité des travaux, les contraintes techniques, ou encore les enjeux environnementaux. Les modèles ne prennent pas non plus en compte les effets à long terme des aménagements proposés. Par conséquent, les résultats obtenus doivent être interprétés avec prudence et complétés par des études de terrain et des consultations avec les acteurs locaux.
 
 C'est l'intérêt de travailler avec des cartographes, qui connaissent la réalité du terrain et ces problématiques.

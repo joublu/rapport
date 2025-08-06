@@ -1,25 +1,17 @@
 \subsection{Bilan du stage}
 
+Lors de ce stage, j'ai pu programmer différentes heuristiques pour optimiser un réseau de pistes cyclables selon des indicateurs d'équité, les tester et les comparer à des modèles exacts. Les résultats trouvés sont éclairants et intéressants. J'ai réussi à aller jusqu'au bout de mes objectifs (tester des heuristiques et adapter l'outil de visualisation pour créer des cartes à partir de mes optimisations), et je ne laisse pas un projet à moitié incomplet, difficile à reprendre par quelqu'un d'autre. Il reste malgré tout des ajustements, notamment sur la question de la tolérance, mais qui n'invalident pas les résultats trouvés (voir section \ref{sect:diff}).
+
 \subsection{Développements ultérieurs}
 
-Il est possible d'ajouter davantage de paramètres pour gagner en réalisme. 
+Les choses évoquées dans la section \ref{sect:diff} sont des choses à reprendre plus proprement dans la suite.
 
-Pour le modèle d'optimisation sur le nombre distinct de catégories, il serait par exemple possible de prendre en compte la population de chaque carreau, pour augmenter la priorité de chaque PCC à améliorer en fonction de la population de son carreau de départ.
+Pour les projets très larges comme celui ci, il est toujours possible d'affiner la modélisation et d'ajouter davantage de paramètres pour gagner en réalisme. Par exemple, conserver des arcs stressants, comme expliqué section \ref{sect:modifs_chemins_eq}, dans l'optimisation, trouver un moyen de rattacher la géographique du terrain aux données (les pentes), etc. Choisir comme noeud délégué d'un carreau son noeud le plus au centre est aussi discutable, on pourrait faire des tests avec le noeud barycentrique.  
 
-J'ai pris en compte cette amélioration potentielle dans mes programmes, de sorte qu'elle soit facilement implémentable par la suite.
-
-Il est aussi possible de faire passer en premier les carreaux ayant une population défavorisée.
-
-Une autre amélioration possible serait d'implémenter une optimisation sur les indicateurs créés par Lou-Ann Deniau, 
+De plus, un développement ultérieur intéressant serait d'implémenter une optimisation sur des indicateurs créés par Lou-Ann Deniau, qui prennent en compte de multiples facteurs et qui sont plus proches d'une situation réelle que les indicateurs que j'ai moi même utilisés. Par exemple, la question de rejoindre le réseau cyclable a été traitée de manière très simplifiée dans mon travail. Dans une situation concrète, on doit prendre en compte les infrastructures comme la présence de parkings de vélo et leur distance aux POI. Ce sont des dimensions que Lou-Ann a intégrées à ses indicateurs.
 
 \subsection{Apport personnel}
 
-Stage pluridisciplinaire, avec des aspects de recherche opérationnelle, de développement informatique et de visualisation de données.
+La diversité des tâches que j'ai dû accomplir, à la fois recherche opérationnelle, développement informatique et visualisation de données, m'a permis de développer des compétences dans plusieurs domaines. La collaboration avec des géographes et des cartographes a également été très enrichissante, grâce au travail d'explication qui m'a été demandé. J'ai eu l'occasion de parler de mes démarches et de mes résultats à des personnes non spécialistes en informatique, ce qui m'a poussé à faire des efforts de vulgarisation. Cette expérience a renforcé mes capacités de communication et d'adaptation dans un contexte professionnel multidisciplinaire.
 
-Travail avec des Géographe - cartographe
-
-Travail d'équipe, vulgarisation, expliquer à des personnes qui ne s'y connaissent pas en informatique.
-
-%----
-
-Projet professionnel
+Ce stage m'a enfin permis d'avoir une expérience en laboratoire, ce qui m'a donné un aperçu concret du secteur de la recherche et ce à quoi je tenais beaucoup. Ce stage a été complémentaire à mon stage de spécialité en entreprise, où j'ai pu découvrir le monde de l'entreprise. En définitive, ce stage a confirmé mon intérêt pour la recherche dans le domaine de la recherche opérationnelle.
